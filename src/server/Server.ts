@@ -4,7 +4,11 @@ const server = express()
 
 server.get('/', (_, res) => {
 
-    return res.send('Hello world!')
+	return res.send('Hello world!')
 })
 
-export {server}
+interface Teste {
+
+}
+
+export { server }
