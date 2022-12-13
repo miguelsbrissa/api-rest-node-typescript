@@ -1,3 +1,3 @@
 import { server } from './server/Server'
 
-server.listen(3333, () => console.log('App is running!')) 
+server.listen(process.env.PORT	, () => console.log(`App is running in ${process.env.PORT}`)) 
