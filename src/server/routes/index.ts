@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import 'dotenv/config'
 import { CidadeController } from '../controllers'
 
+
 const router = Router()
 
 router.get('/', (_, res) => {
@@ -11,6 +12,6 @@ router.get('/', (_, res) => {
 })
 
 
-router.post('/cidades', CidadeController.create)
+router.post('/cidades', CidadeController.createValidation, CidadeController.create)
 
 export { router }
