@@ -1,18 +1,16 @@
 import { Router } from 'express'
-import {StatusCodes} from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
 import 'dotenv/config'
+import { CidadeController } from '../controllers'
 
 const router = Router()
-
-router.post('/teste', (req, res) => {
-	console.log(req.body)
-
-	return res.status(StatusCodes.ACCEPTED).json(req.body)
-})
 
 router.get('/', (_, res) => {
 
 	return res.status(StatusCodes.ACCEPTED).send('Hello World')
 })
 
-export {router}
+
+router.post('/cidades', CidadeController.create)
+
+export { router }
