@@ -7,21 +7,22 @@ import { validation } from '../../shared/middlewares'
 interface ICidade {
 	nome: string
 }
-
-//Essa interface era usada para criar o schema do yup antes de criar o Middleware Validation generico para validação
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface IFilter {
-	filter?: string
+interface IParamsProps {
+	id?: number
 }
 
-export const createValidation = validation({
+export const updateByIdValidation = validation({
 	body: yup.object().shape({
 		nome: yup.string().required().min(3)
 	}),
+	params: yup.object().shape({
+		id: yup.number().integer().required().moreThan(0),
+	})
 })
 
-export const create = async (req: Request<{}, {}, ICidade>, res: Response) => {
+export const updateById = async (req: Request<IParamsProps, {}, ICidade>, res: Response) => {
 	console.log(req.body)
+	console.log(req.params)
 
 	return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Não implementado')
 }
