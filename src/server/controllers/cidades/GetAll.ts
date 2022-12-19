@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import * as yup from 'yup'
+import { CidadesProvider } from '../../providers'
 import { validation } from '../../shared/middlewares'
 
 interface IQueryProps {
@@ -18,7 +19,11 @@ export const getAllValidation = validation({
 })
 
 export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Response) => {
-	console.log(req.query)
+	const result = await CidadesProvider.getAll(req.query.page || 1, req.query.limit || 10, req.query.filter || '')
 
-	return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Não implementado')
+	if(result instanceof Error){
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({errors: { default: result.message}})
+	}else{
+		return res.status(StatusCodes.CREATED).json(result)
+	}
 }
