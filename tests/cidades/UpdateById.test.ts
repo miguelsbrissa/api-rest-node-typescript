@@ -18,8 +18,7 @@ describe('Cidades - UpdateById', () => {
 				nome:'Salto'
 			})
 
-		expect(res1.statusCode).toEqual(StatusCodes.CREATED)
-		expect(typeof res1.body).toEqual('number')
+		expect(res1.statusCode).toEqual(StatusCodes.NO_CONTENT)
 	})
 
 	it('Tenta atualizar um registro com nome muito curto', async () => {

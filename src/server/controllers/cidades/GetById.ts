@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import * as yup from 'yup'
+import { CidadesProvider } from '../../providers'
 import { validation } from '../../shared/middlewares'
 
 interface IParamsProps {
@@ -15,7 +16,19 @@ export const getByIdValidation = validation({
 })
 
 export const getById = async (req: Request<IParamsProps>, res: Response) => {
-	console.log(req.params)
+	if (!req.params.id) {
+		return res.status(StatusCodes.BAD_REQUEST).json({
+			errors: {
+				default: 'O parâmetro "id" precisa ser informado.'
+			}
+		})
+	}
 
-	return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Não implementado')
+	const result = await CidadesProvider.getById(req.params.id)
+
+	if(result instanceof Error){
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({errors: { default: result.message}})
+	}else{
+		return res.status(StatusCodes.OK).json(result)
+	}
 }

@@ -16,7 +16,7 @@ describe('Cidades - DeleteById', () => {
 			.delete('/cidades/1')
 			.send()
 
-		expect(res1.statusCode).toEqual(StatusCodes.OK)
+		expect(res1.statusCode).toEqual(StatusCodes.NO_CONTENT)
 	})
 
 	it('Tenta deletar um registro com o id no formato errado', async () => {

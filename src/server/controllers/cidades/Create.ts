@@ -25,6 +25,4 @@ export const create = async (req: Request<{}, {},  Omit<ICidade, 'id'>>, res: Re
 	}else{
 		return res.status(StatusCodes.CREATED).json(result)
 	}
-
-	
 }
