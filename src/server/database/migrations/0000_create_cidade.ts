@@ -13,6 +13,6 @@ export async function up(knex: Knex) {
 }
 export async function down(knex: Knex) {
 	return knex.schema.dropTable(ETableNames.cidade).then(() => {
-		console.log(`# Create table ${ETableNames.cidade}`)
+		console.log(`# Drop table ${ETableNames.cidade}`)
 	})
 }
