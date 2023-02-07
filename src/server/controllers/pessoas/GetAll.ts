@@ -21,7 +21,7 @@ export const getAllValidation = validation({
 })
 
 export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Response) => {
-	const result = await PessoasProvider.getAll(req.query.page || 1, req.query.limit || 10, req.query.filter || '', Number(req.query.id))
+	const result = await PessoasProvider.getAll(req.query.page || 1, req.query.limit || 10, req.query.filter || '')
 	const count = await PessoasProvider.count(req.query.filter)
 
 	if (result instanceof Error) {

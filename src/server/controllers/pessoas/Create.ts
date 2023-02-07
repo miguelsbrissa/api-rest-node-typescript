@@ -5,18 +5,21 @@ import { IPessoa } from '../../models'
 import { PessoasProvider } from '../../providers'
 import { validation } from '../../shared/middlewares'
 
+
 export const createValidation = validation({
 	body: yup.object().shape({
-		nome: yup.string().required().min(3).max(150)
+		email: yup.string().required().email(),
+		cidadeId: yup.number().integer().required(),
+		nomeCompleto: yup.string().required().min(3),
 	}),
 })
 
-export const create = async (req: Request<{}, {},  Omit<IPessoa, 'id'>>, res: Response) => {
+export const create = async (req: Request<{}, {}, Omit<IPessoa, 'id'>>, res: Response) => {
 	const result = await PessoasProvider.create(req.body)
 
-	if(result instanceof Error){
-		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({errors: { default: result.message}})
-	}else{
+	if (result instanceof Error) {
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ errors: { default: result.message } })
+	} else {
 		return res.status(StatusCodes.CREATED).json(result)
 	}
 }

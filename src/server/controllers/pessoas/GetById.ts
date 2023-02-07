@@ -12,7 +12,6 @@ export const getByIdValidation = validation({
 	params: yup.object().shape({
 		id: yup.number().integer().required().moreThan(0),
 	}),
-
 })
 
 export const getById = async (req: Request<IParamsProps>, res: Response) => {
