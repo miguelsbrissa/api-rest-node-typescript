@@ -1,27 +1,36 @@
 import { StatusCodes } from 'http-status-codes/build/cjs/status-codes'
 import { testServer } from '../jest.setup'
 
-describe('Cidades - GetById', () => {
+describe('Pessoas - GetById', () => {
+	let cidadeId: number | undefined = undefined
+	beforeAll(async () => {
+		const resCidade = await testServer
+			.post('/cidades')
+			.send({ nome: 'Teste' })
 
+		cidadeId = resCidade.body
+	})
 	it('Consulta um registro', async () => {
 		const res = await testServer
-			.post('/cidades')
+			.post('/pessoas')
 			.send({
-				nome: 'Itu'
+				cidadeId,
+				email: 'miguel@email.com',
+				nomeCompleto: 'Miguel'
 			})
-			
+
 		expect(res.statusCode).toEqual(StatusCodes.CREATED)
 
 		const res1 = await testServer
-			.get('/cidades/1')
+			.get('/pessoas/1')
 			.send()
-			
+
 		expect(res1.statusCode).toEqual(StatusCodes.OK)
 	})
 
 	it('Tenta consultar um registro com o id no formato errado', async () => {
 		const res1 = await testServer
-			.get('/cidades/Itu')
+			.get('/pessoas/Miguel')
 			.send()
 
 		expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST)
@@ -30,7 +39,7 @@ describe('Cidades - GetById', () => {
 
 	it('Tenta consultar um registro que não existe', async () => {
 		const res1 = await testServer
-			.get('/cidades/6969696969')
+			.get('/pessoas/6969696969')
 			.send()
 
 		expect(res1.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR)

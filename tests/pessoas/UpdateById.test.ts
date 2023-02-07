@@ -1,21 +1,32 @@
 import { StatusCodes } from 'http-status-codes/build/cjs/status-codes'
 import { testServer } from '../jest.setup'
 
-describe('Cidades - UpdateById', () => {
+describe('Pessoas - UpdateById', () => {
+	let cidadeId: number | undefined = undefined
+	beforeAll(async () => {
+		const resCidade = await testServer
+			.post('/cidades')
+			.send({ nome: 'Teste' })
 
+		cidadeId = resCidade.body
+	})
 	it('Atualiza um registro', async () => {
 		const res = await testServer
-			.post('/cidades')
+			.post('/pessoas')
 			.send({
-				nome: 'Itu'
+				cidadeId,
+				email: 'miguel@email.com',
+				nomeCompleto: 'Miguel'
 			})
-			
+
 		expect(res.statusCode).toEqual(StatusCodes.CREATED)
 
 		const res1 = await testServer
-			.put('/cidades/1')
+			.put('/pessoas/1')
 			.send({
-				nome:'Salto'
+				nomeCompleto: 'Rafael',
+				email: 'rafael@email.com',
+				cidadeId
 			})
 
 		expect(res1.statusCode).toEqual(StatusCodes.NO_CONTENT)
@@ -23,20 +34,24 @@ describe('Cidades - UpdateById', () => {
 
 	it('Tenta atualizar um registro com nome muito curto', async () => {
 		const res1 = await testServer
-			.put('/cidades/1')
+			.put('/pessoas/1')
 			.send({
-				nome:'I'
+				nomeCompleto: 'R',
+				email: 'rafael@email.com',
+				cidadeId: 11
 			})
 
 		expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST)
-		expect(res1.body).toHaveProperty('errors.body.nome')
+		expect(res1.body).toHaveProperty('errors.body.nomeCompleto')
 	})
 
 	it('Tenta atualizar um registro com o id no formato errado', async () => {
 		const res1 = await testServer
-			.put('/cidades/Itu')
+			.put('/pessoas/Itu')
 			.send({
-				nome:'I'
+				nomeCompleto: 'Rafael',
+				email: 'rafael@email.com',
+				cidadeId: 11
 			})
 
 		expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST)
@@ -45,11 +60,13 @@ describe('Cidades - UpdateById', () => {
 
 	it('Tenta atualizar um registro que não existe', async () => {
 		const res1 = await testServer
-			.put('/cidades/6969696969')
+			.put('/pessoas/6969696969')
 			.send({
-				nome:'I'
+				nomeCompleto: 'Rafael',
+				email: 'rafael@email.com',
+				cidadeId: 11
 			})
 
-		expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST)
+		expect(res1.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR)
 	})
 })
