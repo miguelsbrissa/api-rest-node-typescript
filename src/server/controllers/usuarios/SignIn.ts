@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import * as yup from 'yup'
 import { UsuariosProvider } from '../../providers'
 import { validation } from '../../shared/middlewares'
+import { PasswordCrypto } from '../../shared/services'
 
 interface IBodyProps {
 	email?: string
@@ -37,11 +38,12 @@ export const signIn = async (req: Request<IBodyProps>, res: Response) => {
 	const { email, senha } = req.body
 
 	const result = await UsuariosProvider.getByEmail(email)
-
+	
 	if (result instanceof Error) {
 		return res.status(StatusCodes.UNAUTHORIZED).json({ errors: { default: 'E-mail e/ou senha incorretos' } })
 	} else {
-		if (result.senha === senha)
+		const passMatch = await PasswordCrypto.verifyPassword(senha, result.senha)
+		if (passMatch)
 			return res.status(StatusCodes.OK).json({accessToken: 'teste.teste.tes.te'})
 
 		return res.status(StatusCodes.UNAUTHORIZED).json({ errors: { default: 'E-mail e/ou senha incorretos' } })
