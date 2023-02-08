@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import 'dotenv/config'
-import { CidadeController, PessoaController } from '../controllers'
+import { CidadeController, PessoaController, UsuarioController } from '../controllers'
 
 
 const router = Router()
@@ -23,5 +23,8 @@ router.get('/pessoas', PessoaController.getAllValidation, PessoaController.getAl
 router.get('/pessoas/:id', PessoaController.getByIdValidation, PessoaController.getById)
 router.put('/pessoas/:id', PessoaController.updateByIdValidation, PessoaController.updateById)
 router.delete('/pessoas/:id', PessoaController.deleteByIdValidation, PessoaController.deleteById)
+
+router.post('/login', UsuarioController.signInValidation, UsuarioController.signIn)
+router.post('/cadastrar', UsuarioController.signUpValidation, UsuarioController.signUp)
 
 export { router }

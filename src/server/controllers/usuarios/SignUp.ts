@@ -5,7 +5,7 @@ import { IUsuario } from '../../models'
 import { UsuariosProvider } from '../../providers'
 import { validation } from '../../shared/middlewares'
 
-export const signInValidation = validation({
+export const signUpValidation = validation({
 	body: yup.object().shape({
 		nome: yup.string().required().min(3),
 		email: yup.string().required().min(5).email(),
@@ -13,7 +13,7 @@ export const signInValidation = validation({
 	}),
 })
 
-export const signIn = async (req: Request<{}, {},  Omit<IUsuario, 'id'>>, res: Response) => {
+export const signUp = async (req: Request<{}, {},  Omit<IUsuario, 'id'>>, res: Response) => {
 	const result = await UsuariosProvider.create(req.body)
 
 	if(result instanceof Error){
