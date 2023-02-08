@@ -17,7 +17,7 @@ export const signUp = async (req: Request<{}, {},  Omit<IUsuario, 'id'>>, res: R
 	const result = await UsuariosProvider.create(req.body)
 
 	if(result instanceof Error){
-		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({errors: { default: result.message}})
+		return res.status(StatusCodes.BAD_REQUEST).json({errors: { default: result.message}})
 	}else{
 		return res.status(StatusCodes.CREATED).json(result)
 	}
