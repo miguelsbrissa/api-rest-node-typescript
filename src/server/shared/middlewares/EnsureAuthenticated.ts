@@ -8,7 +8,7 @@ export const ensureAuthenticated: RequestHandler = async (req, res, next) => {
 	if (!authorization) {
 		return res.status(StatusCodes.UNAUTHORIZED).json(
 			{
-				erros:
+				errors:
 				{
 					default:
 						'Não autenticado'
@@ -21,7 +21,7 @@ export const ensureAuthenticated: RequestHandler = async (req, res, next) => {
 	if (type !== 'Bearer') {
 		return res.status(StatusCodes.UNAUTHORIZED).json(
 			{
-				erros:
+				errors:
 				{
 					default:
 						'Não autenticado'
@@ -33,7 +33,7 @@ export const ensureAuthenticated: RequestHandler = async (req, res, next) => {
 	if (JWTData === 'INVALID_TOKEN') {
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(
 			{
-				erros:
+				errors:
 				{
 					default:
 						'Não autenticado'
@@ -42,7 +42,7 @@ export const ensureAuthenticated: RequestHandler = async (req, res, next) => {
 	} else if (JWTData === 'JWT_SECRET_NOT_FOUND') {
 		return res.status(StatusCodes.UNAUTHORIZED).json(
 			{
-				erros:
+				errors:
 				{
 					default:
 						'Erro ao verificar o token'
