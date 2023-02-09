@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import * as yup from 'yup'
 import { UsuariosProvider } from '../../providers'
 import { validation } from '../../shared/middlewares'
-import { PasswordCrypto } from '../../shared/services'
+import { JWTService, PasswordCrypto } from '../../shared/services'
 
 interface IBodyProps {
 	email?: string
@@ -37,15 +37,20 @@ export const signIn = async (req: Request<IBodyProps>, res: Response) => {
 
 	const { email, senha } = req.body
 
-	const result = await UsuariosProvider.getByEmail(email)
-	
-	if (result instanceof Error) {
+	const usuario = await UsuariosProvider.getByEmail(email)
+
+	if (usuario instanceof Error) {
 		return res.status(StatusCodes.UNAUTHORIZED).json({ errors: { default: 'E-mail e/ou senha incorretos' } })
 	} else {
-		const passMatch = await PasswordCrypto.verifyPassword(senha, result.senha)
-		if (passMatch)
-			return res.status(StatusCodes.OK).json({accessToken: 'teste.teste.tes.te'})
+		const passMatch = await PasswordCrypto.verifyPassword(senha, usuario.senha)
+		if (!passMatch)
+			return res.status(StatusCodes.UNAUTHORIZED).json({ errors: { default: 'E-mail e/ou senha incorretos' } })
 
-		return res.status(StatusCodes.UNAUTHORIZED).json({ errors: { default: 'E-mail e/ou senha incorretos' } })
+		const accessToken = JWTService.sign({ uid: usuario.id })
+		if (accessToken === 'JWT_SECRET_NOT_FOUND') {
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ errors: { default: 'Erro ao gerar o token de acesso' } })
+		}
+
+		return res.status(StatusCodes.OK).json({ accessToken: accessToken })
 	}
 }

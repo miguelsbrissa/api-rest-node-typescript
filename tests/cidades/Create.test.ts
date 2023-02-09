@@ -7,7 +7,7 @@ describe('Cidades - Create', () => {
 		const res1 = await testServer
 			.post('/cidades')
 			.send({
-				nome:'Itu'
+				nome: 'Itu'
 			})
 
 		expect(res1.statusCode).toEqual(StatusCodes.CREATED)
@@ -18,7 +18,7 @@ describe('Cidades - Create', () => {
 		const res1 = await testServer
 			.post('/cidades')
 			.send({
-				nome:'I'
+				nome: 'I'
 			})
 
 		expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST)
